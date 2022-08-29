@@ -8,6 +8,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class Usuario(models.Model):
     nome = models.CharField(max_length=100, null=False, blank=False)
     email = models.EmailField(null=False, blank=False)
+    dataDeNasci = models.CharField(max_length=100, null=False, blank=False)
+    idade = models.DecimalField(blank=False , null = False, decimal_places=2, max_digits=5, validators=[MinValueValidator(0, "O valor deve ser maior que 0"), MaxValueValidator(250)])
+    
 
     class Meta:
         abstract = True

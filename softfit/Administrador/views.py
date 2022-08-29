@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from calendar import monthrange
 from datetime import date
+from datetime import datetime
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 from .services import avaliacao_service, aluno_service, prof_service, estadof_service, objetivo_service, exercicio_service
@@ -29,7 +30,9 @@ def loginAdmin(request):
             })
     else:
         return render(request,"administrador/login.html")
+def idadePelaData(data):
 
+    return idade
 def logout_view(request):
     logout(request)
     return render(request, "homepage/index.html", {
@@ -43,6 +46,16 @@ def index(request):
     dia = monthrange(date.today().year, date.today().month)[1]
     return render(request, 'Administrador/inicial.html', {'alunos': alunos, 'profs': profs, 'dia':dia})
 
+
+def IdadePelaData(DatadeNasci):
+    Data_atual=datetime.today().strftime('%Y-%m-%d')
+    diaNasci,mesNasci,anoNasci = DatadeNasci.split('/')
+    anoAtual,mesAtual,diaAtual = Data_atual.split('-')
+    idade = (int(anoAtual)-1)-(int(anoNasci))
+    if(int(mesAtual>mesNasci) or (int(mesAtual==mesNasci)and(int(diaAtual>=diaNasci)))):
+        idade+=1
+    return idade
+
 @user_passes_test(admin_check, login_url='/')
 def cadastroAluno(request):
     if request.method == "POST":
@@ -51,6 +64,7 @@ def cadastroAluno(request):
         if form_aluno.is_valid():
             nome = form_aluno.cleaned_data["nome"]
             email = form_aluno.cleaned_data["email"]
+            dataDeNascimento = form_aluno.cleaned_data["Data de Nascimento"]
             if form_aval.is_valid():
                 peso = form_aval.cleaned_data["peso"]
                 altura = form_aval.cleaned_data["altura"]

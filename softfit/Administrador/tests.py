@@ -6,10 +6,12 @@ from calendar import monthrange
 from datetime import date
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-
+from unittest import TestCase
+from .views import idadePelaData
 # Create your tests here.
 
 # H20 - Login Administrador
+
 class AdministradorTestCase(TestCase):
     def setUp(self):
         # A princípio, o administrador já terá um Login pré-definido para ele ao adquirir o programa.
@@ -19,6 +21,19 @@ class AdministradorTestCase(TestCase):
         user = authenticate(username="administrador", password="wrongpassword")
         # Caso um usuário com e-mail e senha preenchidos não forem encontrados, a página de login deverá ser atualizada com a mensagem "Administrador não encontrado!".
         self.assertEqual(user, None, msg="Administrador não encontrado!")
+
+class Testdata(TestCase):
+    def test1(self):
+        result = 20
+        self.assertEqual(result, IdadePelaData("27/09/2001"))
+    def test2(self):
+        result = 21
+        self.assertEqual(result, IdadePelaData("27/04/2001"))
+    def test3(self):
+        result = 21
+        self.assertEqual(result, IdadePelaData("27/08/2001"))
+
+
 
 # H19 - Cadastrar Professores
 class ProfessorTestCase(TestCase):
